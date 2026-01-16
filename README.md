@@ -1,45 +1,76 @@
 # Ebook to Static Site Generator
 
-This project contains tools and resources to convert a monolithic HTML ebook (exported from Calibre) into a modern, responsive, and aesthetically pleasing static website.
+Convert monolithic HTML ebooks (exported from Calibre) into modern, responsive, and aesthetically pleasing static websites.
 
-## Project Overview
+## Features
 
-The goal was to transform a heavy single-page HTML file (10MB+) into a lightweight, navigable static site structure suitable for web hosting or offline reading.
+- **Dependency-Free**: Uses only Python's built-in libraries (no pip install required)
+- **Premium Design**: Clean, paper-like reading interface with beautiful Chinese typography
+- **Responsive Layout**: Desktop sidebar + mobile hamburger menu
+- **Offline-First**: Uses system fonts, no CDN dependencies
+- **Visual Enhancements**: Breakout images, lightbox, and smooth animations
 
-## Technical Approach
+## Project Structure
 
-### 1. Content Processing (`generate_site.py`)
-*   **Dependency-Free Parsing**: Instead of using heavy libraries like `BeautifulSoup`, the script uses Python's built-in `re` (regular expressions) to split the source HTML. This ensures the script runs in any standard Python environment without installation steps.
-*   **Segmentation Strategy**:
-    *   The script identifies content blocks using the `div class="calibre"` structure.
-    *   It detects Chapter headers (`<h1 class="calibre4">`) to create split points.
-    *   Generates individual files per chapter (e.g., `chapter_01.html`).
-*   **Templating**: Uses a concise HTML5 template string to wrap extracted content with navigation, scripts, and meta tags.
+```
+ebook-helper/
+├── public/              # Place your ebook source files here
+│   ├── index.html       # Calibre-exported HTML
+│   └── images/          # Images folder
+├── scripts/
+│   ├── generate_site.py # Main generation script
+│   └── theme.css        # Styling for generated site
+├── dist/                # Generated output (auto-created)
+└── README.md
+```
 
-### 2. Design & User Experience (`theme.css`)
-*   **Premium Aesthetic**: A clean, paper-like reading interface using `Noto Serif TC` (or compatible system fonts) for body text and a dark, fixed sidebar for navigation.
-*   **Responsive Layout**:
-    *   **Desktop**: Persistent left sidebar with a "card-style" content area.
-    *   **Mobile**: Sidebar is hidden by default and accessible via a hamburger menu (created via vanilla JS injection).
-*   **Offline-First**:
-    *   **Local Fonts**: Removed dependencies on Google Fonts/CDNs. The CSS uses a robust "System Font Stack" (Songti, PMingLiU, Source Han Serif) to render beautiful Chinese typography using fonts already present on the user's OS.
-*   **Visual Enhancements**:
-    *   **"Breakout" Images**: Content images are styled to be wider than the text column with deep shadows (3D effect), creating a "pop-out" visual rhythm (`width: calc(100% + 6rem)`).
-    *   **Lightbox**: Included a vanilla JS/CSS lightbox to zoom into images when clicked.
+## Quick Start
 
-### 3. Navigation Structure
-*   **Volume Segmentation**: The processing script maps chapter filenames to their corresponding Book/Volume titles (e.g., "第一卷：從神話到歷史"), inserting them as section headers in the sidebar.
-*   **Smart TOC**: The sidebar highlights the current active chapter automatically.
+### 1. Prepare Your Ebook
 
-## Usage
+Export your ebook as HTML from Calibre, then place the files in the `public/` directory:
 
-1.  Place the source `index.html` and `images/` folder in the data directory.
-2.  Run the generation script:
-    ```bash
-    python3 generate_site.py
-    ```
-3.  The script will:
-    *   Parse `index_backup.html` (renamed source).
-    *   Generate `index.html` (Cover) and `chapter_XX.html` files.
-    *   Copy `images/` and `theme.css` to the output.
-    *   (Optional) Move generated files to the root level.
+```bash
+public/
+├── index.html    # Main HTML file
+└── images/       # Images folder (if any)
+```
+
+### 2. Generate the Static Site
+
+```bash
+python3 scripts/generate_site.py
+```
+
+### 3. View the Result
+
+The generated site will be in the `dist/` folder. Open `dist/index.html` in your browser, or serve it locally:
+
+```bash
+# Using Python's built-in server
+cd dist && python3 -m http.server 8080
+```
+
+## Technical Details
+
+### Content Processing
+
+- Uses regex-based parsing to split the source HTML
+- Identifies chapter headers (`<h1 class="calibre4">`) as split points
+- Generates individual `chapter_XX.html` files
+
+### Design Features
+
+- **Typography**: Noto Serif TC / System Font Stack (Songti, PMingLiU, Source Han Serif)
+- **Layout**: Fixed sidebar navigation with card-style content area
+- **Images**: "Breakout" styling with deep shadows for visual impact
+- **Interaction**: Click-to-zoom lightbox for images
+
+### Navigation
+
+- Auto-generated table of contents with volume/section headers
+- Active chapter highlighting in sidebar
+
+## License
+
+MIT License

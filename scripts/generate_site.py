@@ -2,11 +2,16 @@ import os
 import re
 import shutil
 
-# Configuration
-SOURCE_FILE = 'index_backup.html'
-OUTPUT_DIR = 'dist'
+# Get the project root directory (parent of scripts/)
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+PROJECT_ROOT = os.path.dirname(SCRIPT_DIR)
+
+# Configuration - paths relative to project root
+PUBLIC_DIR = os.path.join(PROJECT_ROOT, 'public')
+OUTPUT_DIR = os.path.join(PROJECT_ROOT, 'dist')
+SOURCE_FILE = os.path.join(PUBLIC_DIR, 'index.html')
 IMAGES_DIR = 'images'
-THEME_CSS = 'theme.css'
+THEME_CSS = os.path.join(SCRIPT_DIR, 'theme.css')
 
 # HTML Template with offline compatibility and mobile menu support
 HTML_TEMPLATE = """
@@ -119,6 +124,12 @@ HTML_TEMPLATE = """
 """
 
 def main():
+    # Check if source file exists
+    if not os.path.exists(SOURCE_FILE):
+        print(f"Error: Source file not found at {SOURCE_FILE}")
+        print(f"Please place your Calibre-exported index.html in the public/ directory.")
+        return
+    
     print(f"Reading {SOURCE_FILE}...")
     with open(SOURCE_FILE, 'r', encoding='utf-8') as f:
         content = f.read()
@@ -221,8 +232,8 @@ def main():
     if not os.path.exists(OUTPUT_DIR):
         os.makedirs(OUTPUT_DIR)
         
-    # Copy Images
-    src_images = IMAGES_DIR
+    # Copy Images from public/
+    src_images = os.path.join(PUBLIC_DIR, IMAGES_DIR)
     dst_images = os.path.join(OUTPUT_DIR, IMAGES_DIR)
     if os.path.exists(src_images):
         if os.path.exists(dst_images):
@@ -230,9 +241,15 @@ def main():
         shutil.copytree(src_images, dst_images)
         print("Images copied.")
 
-    # Copy Style.css
-    if os.path.exists('style.css'):
-        shutil.copy('style.css', os.path.join(OUTPUT_DIR, 'style.css'))
+    # Copy Style.css from public/ if exists
+    src_style = os.path.join(PUBLIC_DIR, 'style.css')
+    if os.path.exists(src_style):
+        shutil.copy(src_style, os.path.join(OUTPUT_DIR, 'style.css'))
+    
+    # Copy theme.css from scripts/
+    if os.path.exists(THEME_CSS):
+        shutil.copy(THEME_CSS, os.path.join(OUTPUT_DIR, 'theme.css'))
+        print("Theme CSS copied.")
     
     # Generate TOC HTML with Book Headers
     toc_html = ""

@@ -1,3 +1,20 @@
-data/
+# OS files
 .DS_Store
+
+# Python
 __pycache__/
+*.pyc
+
+# User data (place source files in public/)
+data/
+kodansha-china-history/
+
+# Generated output
+dist/
+
+# Dependencies
+node_modules/
+
+# Ignore everything in public except README
+public/*
+!public/README.md
