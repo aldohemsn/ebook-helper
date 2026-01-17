@@ -31,7 +31,17 @@ ebook-helper/
 | Book | Generator Script | Theme |
 |------|------------------|-------|
 | 講談社中國史 (Chinese) | `generate_site.py` | `theme.css` |
-| Sapiens: A Brief History of Humankind | `generate_sapiens.py` | `theme_sapiens.css` |
+| Sapiens: A Brief History of Humankind (English) | `generate_sapiens.py` | `theme_sapiens.css` |
+| 人類大歷史 (Traditional Chinese) | `generate_renlei.py` | `theme.css` |
+
+### Quick Start (Chinese Sapiens)
+
+1. Ensure the ebook source is at `ren-lei-da-li-shi/index.html`
+2. Run the generator:
+   ```bash
+   python3 scripts/generate_renlei.py
+   ```
+3. Open `dist/index.html` to read.
 
 ## Quick Start
 
