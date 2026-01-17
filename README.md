@@ -27,6 +27,8 @@ ebook-helper/
 │   ├── theme_sichou.css           # Theme for Silk Roads (Taiwan)
 │   ├── theme_sichou_shao.css      # Theme for Silk Roads (Shao Xudong)
 │   ├── theme_silkroads.css        # Theme for Silk Roads (Peter Frankopan)
+│   ├── generate_renlei_jian_shi.py # Generator for 人类简史 (Simplified Chinese)
+│   ├── theme_renlei_jian_shi.css   # Theme for 人类简史 (Simplified Chinese)
 │   └── deduplicate_images.py      # Utility to remove duplicate images
 ├── public/                        # Place Chinese ebook source files here
 ├── ren-lei-da-li-shi/             # 人類大歷史 source (gitignored)
@@ -37,6 +39,8 @@ ebook-helper/
 ├── dist_sichou/                   # Generated output for 絲綢之路 Taiwan edition
 ├── dist_sichou_shao/              # Generated output for 絲綢之路 Shao Xudong edition
 ├── dist_silkroads/                # Generated output for Silk Roads (Peter Frankopan)
+├── Ren Lei Jian Shi _Cong Dong Wu Dao Shang D - Yuval Noah Harari/ # 人类简史 Source (gitignored)
+├── dist_renlei_jian_shi/          # Generated output for 人类简史 (Simplified)
 └── README.md
 ```
 
@@ -50,6 +54,16 @@ ebook-helper/
 | 絲綢之路 (Taiwan Edition) | `generate_sichou.py` | `theme_sichou.css` | `dist_sichou/` |
 | 絲綢之路 (Shao Xudong Translation) | `generate_sichou_shao.py` | `theme_sichou_shao.css` | `dist_sichou_shao/` |
 | The Silk Roads (Original English) | `generate_silkroads.py` | `theme_silkroads.css` | `dist_silkroads/` |
+| 人类简史 (Simplified Chinese Sapiens) | `generate_renlei_jian_shi.py` | `theme_renlei_jian_shi.css` | `dist_renlei_jian_shi/` |
+
+### Quick Start (Sapiens - Simplified Chinese)
+
+1. Ensure the ebook source is at `Ren Lei Jian Shi _Cong Dong Wu Dao Shang D - Yuval Noah Harari/index.html`
+2. Run the generator:
+   ```bash
+   python3 scripts/generate_renlei_jian_shi.py
+   ```
+3. Open `dist_renlei_jian_shi/index.html` to read.
 
 ### Quick Start (The Silk Roads - English)
 
