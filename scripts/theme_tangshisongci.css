@@ -418,7 +418,11 @@ h3 {
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
-.chapter-content img.zaozi {
+.chapter-content img.zaozi,
+.chapter-content img.kindle-cn-inline-image,
+.chapter-content img.kindle-cn-inline-image2,
+.chapter-content img.kindle-cn-inline-image3,
+.chapter-content img.calibre4 {
     display: inline-block;
     max-width: none;
     width: 1.2em;
