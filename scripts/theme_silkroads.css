@@ -1,0 +1,475 @@
+/* Silk Roads Theme - A Historical, Warm Aesthetic */
+:root {
+    /* Color Palette */
+    --bg-paper: #fdfbf7;
+    /* Warm, parchment-like background */
+    --bg-sidebar: #2c241b;
+    /* Deep earthy brown/black */
+    --text-main: #2b1d16;
+    /* Dark rich brown for text */
+    --text-sidebar: #e3d8c8;
+    /* Sand color for sidebar text */
+    --accent-primary: #9e2a2b;
+    /* Deep Persian Red */
+    --accent-secondary: #d4a017;
+    /* Antique Gold */
+    --border-subtle: #e6dfcf;
+
+    /* Typography */
+    --font-serif: "Noto Serif TC", "Songti TC", "PMingLiU", "Georgia", serif;
+    --font-heading: "Noto Serif TC", "Source Han Serif TW", serif;
+    --font-sans: "Helvetica Neue", Helvetica, Arial, sans-serif;
+
+    /* Layout */
+    --sidebar-width: 280px;
+    --max-content-width: 42rem;
+    /* Classic book width */
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: var(--font-serif);
+    background-color: var(--bg-paper);
+    color: var(--text-main);
+    line-height: 1.8;
+    font-size: 19px;
+    /* Slightly larger, comfortable reading size */
+    -webkit-font-smoothing: antialiased;
+}
+
+/* Layout Container */
+.app-container {
+    display: flex;
+    min-height: 100vh;
+}
+
+/* Sidebar Styling */
+.sidebar {
+    width: var(--sidebar-width);
+    background-color: var(--bg-sidebar);
+    color: var(--text-sidebar);
+    height: 100vh;
+    position: fixed;
+    left: 0;
+    top: 0;
+    overflow-y: auto;
+    z-index: 100;
+    box-shadow: 4px 0 15px rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: column;
+}
+
+.sidebar-header {
+    padding: 2.5rem 2rem;
+    background: rgba(0, 0, 0, 0.1);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    text-align: center;
+}
+
+.book-title {
+    font-family: var(--font-heading);
+    color: var(--accent-secondary);
+    font-size: 1.4rem;
+    font-weight: 700;
+    text-decoration: none;
+    letter-spacing: 0.05em;
+    display: block;
+    line-height: 1.3;
+}
+
+.book-subtitle {
+    display: block;
+    font-size: 0.8rem;
+    color: #a89f91;
+    margin-top: 0.5rem;
+    font-style: italic;
+}
+
+.toc {
+    flex: 1;
+    padding: 2rem 0;
+}
+
+.toc ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.toc li a {
+    display: block;
+    padding: 0.8rem 2rem;
+    color: #a89f91;
+    text-decoration: none;
+    font-size: 0.95rem;
+    transition: all 0.3s ease;
+    border-right: 4px solid transparent;
+}
+
+.toc li a:hover {
+    color: var(--text-sidebar);
+    background: rgba(255, 255, 255, 0.03);
+}
+
+.toc li a.active {
+    color: var(--accent-secondary);
+    background: rgba(0, 0, 0, 0.2);
+    border-right-color: var(--accent-secondary);
+    font-weight: bold;
+}
+
+/* Main Content Area */
+.content-area {
+    margin-left: var(--sidebar-width);
+    flex: 1;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    background-color: var(--bg-paper);
+    background-image: linear-gradient(to right, rgba(0, 0, 0, 0.02) 0%, transparent 5%, transparent 95%, rgba(0, 0, 0, 0.02) 100%);
+}
+
+.chapter-content {
+    width: 100%;
+    max-width: var(--max-content-width);
+    padding: 5rem 2rem;
+    background: transparent;
+}
+
+/* Typography Details */
+.chapter-title {
+    font-family: var(--font-heading);
+    font-size: 3rem;
+    color: var(--accent-primary);
+    margin-bottom: 3rem;
+    text-align: center;
+    font-weight: 800;
+    line-height: 1.2;
+    border-bottom: 1px solid var(--accent-secondary);
+    padding-bottom: 2rem;
+    position: relative;
+}
+
+.chapter-title::after {
+    content: "❖";
+    position: absolute;
+    bottom: -0.9rem;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--bg-paper);
+    padding: 0 1rem;
+    color: var(--accent-secondary);
+    font-size: 1.2rem;
+}
+
+p {
+    margin-bottom: 1.5em;
+    text-align: justify;
+}
+
+/* First letter drop cap effect for the first paragraph */
+.chapter-content>p:first-of-type::first-letter {
+    font-size: 3.5em;
+    float: left;
+    margin-right: 0.1em;
+    margin-top: -0.1em;
+    line-height: 0.8;
+    color: var(--accent-primary);
+    font-family: var(--font-heading);
+}
+
+/* Images - Embedded like plates */
+img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 3rem auto;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+    border: 4px solid #fff;
+    outline: 1px solid #ddd;
+}
+
+.caption {
+    text-align: center;
+    font-size: 0.85rem;
+    color: #666;
+    margin-top: -2rem;
+    margin-bottom: 3rem;
+    font-style: italic;
+}
+
+/* Navigation Footer */
+.navigation-footer {
+    margin-top: 5rem;
+    border-top: 1px solid var(--border-subtle);
+    padding-top: 3rem;
+    display: flex;
+    justify-content: space-between;
+}
+
+.nav-btn {
+    text-decoration: none;
+    color: var(--text-main);
+    font-family: var(--font-heading);
+    font-weight: bold;
+    padding: 0.5rem 1rem;
+    border: 1px solid var(--border-subtle);
+    border-radius: 4px;
+    transition: all 0.2s;
+    font-size: 0.9rem;
+}
+
+.nav-btn:hover {
+    background: var(--accent-primary);
+    color: #fff;
+    border-color: var(--accent-primary);
+}
+
+/* Mobile & Responsive */
+.mobile-header {
+    display: none;
+    background: var(--bg-sidebar);
+    color: var(--text-sidebar);
+    padding: 1rem;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 200;
+}
+
+.menu-toggle {
+    background: none;
+    border: none;
+    color: var(--text-sidebar);
+    font-size: 1.5rem;
+    cursor: pointer;
+}
+
+.mobile-title {
+    margin-left: 1rem;
+    font-weight: bold;
+    font-family: var(--font-heading);
+}
+
+.menu-close {
+    display: none;
+    background: transparent;
+    border: none;
+    color: var(--text-sidebar);
+    font-size: 1.5rem;
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    cursor: pointer;
+}
+
+.sidebar-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 90;
+}
+
+@media (max-width: 768px) {
+    .sidebar {
+        transform: translateX(-100%);
+        transition: transform 0.3s ease;
+    }
+
+    .sidebar.open {
+        transform: translateX(0);
+    }
+
+    .mobile-header {
+        display: flex;
+    }
+
+    .menu-close {
+        display: block;
+    }
+
+    .content-area {
+        margin-left: 0;
+        padding-top: 60px;
+        /* Header height */
+    }
+
+    .chapter-content {
+        padding: 2rem 1.5rem;
+    }
+
+    .sidebar-overlay.active {
+        display: block;
+    }
+
+    .chapter-title {
+        font-size: 2rem;
+    }
+}
+
+/* ============================================
+   Silk Roads Book-Specific Overrides
+   ============================================ */
+
+/* Hide duplicate chapter number and title from original ebook */
+.para-cn-chap-pg,
+.para-ct,
+h1.para-ct {
+    display: none !important;
+}
+
+/* Hide decorative ornaments that come with chapter titles */
+.para-orn {
+    display: none !important;
+}
+
+/* Fix lightbox - ensure it's hidden by default and image doesn't show alt text */
+.lightbox {
+    display: none;
+    position: fixed;
+    z-index: 2000;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.95);
+    justify-content: center;
+    align-items: center;
+    cursor: zoom-out;
+}
+
+.lightbox.active {
+    display: flex;
+}
+
+.lightbox img {
+    max-width: 95vw;
+    max-height: 95vh;
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+    border: none;
+    outline: none;
+    object-fit: contain;
+    margin: 0;
+    cursor: default;
+}
+
+/* Navigation footer improvements */
+.navigation-footer {
+    margin-top: 5rem;
+    border-top: 1px solid var(--border-subtle);
+    padding-top: 3rem;
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.nav-btn {
+    text-decoration: none;
+    color: var(--text-main);
+    font-family: var(--font-heading);
+    font-weight: 600;
+    padding: 0.75rem 1.5rem;
+    border: 2px solid var(--accent-secondary);
+    border-radius: 6px;
+    transition: all 0.25s ease;
+    font-size: 0.95rem;
+    background: transparent;
+}
+
+.nav-btn:hover {
+    background: var(--accent-primary);
+    color: #fff;
+    border-color: var(--accent-primary);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(158, 42, 43, 0.3);
+}
+
+/* Reset calibre styles that cause issues */
+.calibre,
+.calibre1,
+.calibre2,
+.calibre3 {
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+/* Ensure page_top_padding doesn't add excessive space since we have our own title */
+.page_top_padding {
+    margin-top: 0 !important;
+}
+
+/* Style section breaks nicely */
+.section_break {
+    text-align: center;
+    font-size: 1.5rem;
+    color: var(--accent-secondary);
+    margin: 3rem 0;
+    letter-spacing: 0.5em;
+}
+
+/* Blockquote styling */
+blockquote {
+    margin: 2rem 0;
+    padding: 1.5rem 2rem;
+    border-left: 4px solid var(--accent-secondary);
+    background: rgba(212, 160, 23, 0.05);
+    font-style: italic;
+}
+
+/* Epigraph styling */
+.para-epif,
+.para-epif-epi-pg {
+    font-style: italic;
+    margin: 2rem 0 !important;
+}
+
+.para-eps {
+    text-align: right;
+    font-size: 0.9rem;
+    color: #666;
+    margin-bottom: 2rem !important;
+}
+
+/* Small caps styling */
+.smallcaps,
+.smallcaps1,
+.smallcaps2 {
+    font-variant: small-caps;
+    letter-spacing: 0.05em;
+}
+
+/* Fix inline images like dingbats */
+.inline {
+    width: auto !important;
+    max-width: 2rem;
+    height: auto;
+    display: inline-block;
+    vertical-align: middle;
+    margin: 0 0.25rem;
+    border: none !important;
+    box-shadow: none !important;
+    outline: none !important;
+}
+
+.figure_dingbat_small {
+    display: block;
+    text-align: center;
+    margin: 2rem auto;
+}
+
+.figure_dingbat_small img {
+    width: 3rem !important;
+    border: none !important;
+    box-shadow: none !important;
+    outline: none !important;
+}

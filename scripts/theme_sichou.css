@@ -1,0 +1,437 @@
+/* Modern Reset & Base */
+:root {
+    --primary-color: #2c3e50;
+    --accent-color: #c0392b;
+    /* China Red-ish */
+    --bg-color: #f9f9f7;
+    /* Paper-like off-white */
+    --sidebar-bg: #1a202c;
+    --sidebar-text: #e2e8f0;
+    --sidebar-width: 300px;
+    --text-color: #2d3436;
+    --border-color: #e2e8f0;
+    /* Offline Font Stack - Prioritizing aesthetically pleasing system fonts */
+    --font-serif: "Noto Serif TC", "Songti TC", "Source Han Serif TW", "Source Han Serif", "PMingLiU", "Yu Mincho", "Hiragino Mincho ProN", serif;
+    --font-sans: "Open Sans", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: var(--font-sans);
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    line-height: 1.6;
+    font-size: 18px;
+}
+
+/* Layout */
+.app-container {
+    display: flex;
+    min-height: 100vh;
+}
+
+/* Sidebar */
+.sidebar {
+    width: var(--sidebar-width);
+    background-color: var(--sidebar-bg);
+    color: var(--sidebar-text);
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    height: 100vh;
+    overflow-y: auto;
+    left: 0;
+    top: 0;
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    transition: transform 0.3s ease;
+}
+
+.sidebar-header {
+    padding: 2rem 1.5rem;
+    background: rgba(0, 0, 0, 0.2);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.book-title {
+    font-family: var(--font-serif);
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #fff;
+    text-decoration: none;
+    letter-spacing: 0.05em;
+}
+
+.book-section-header {
+    padding: 1.5rem 1.5rem 0.5rem 1.5rem;
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: #718096;
+    letter-spacing: 0.05em;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    margin-top: 0.5rem !important;
+}
+
+.book-section-header:first-child {
+    border-top: none;
+    margin-top: 0 !important;
+    padding-top: 0.5rem;
+}
+
+.toc {
+    flex: 1;
+    padding: 1rem 0;
+}
+
+.toc ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.toc li {
+    margin: 0;
+}
+
+.toc a {
+    display: block;
+    padding: 0.75rem 1.5rem;
+    color: #a0aec0;
+    text-decoration: none;
+    transition: all 0.2s;
+    font-size: 0.95rem;
+    border-left: 3px solid transparent;
+}
+
+.toc a:hover {
+    color: #fff;
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.toc a.active {
+    color: #fff;
+    background: rgba(0, 0, 0, 0.3);
+    border-left-color: var(--accent-color);
+    font-weight: 600;
+}
+
+/* Mobile Header & Controls */
+.mobile-header {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 60px;
+    background: #fff;
+    border-bottom: 1px solid var(--border-color);
+    z-index: 900;
+    align-items: center;
+    padding: 0 1rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.menu-toggle {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: var(--primary-color);
+    padding: 0.5rem;
+    margin-right: 1rem;
+}
+
+.mobile-title {
+    font-family: var(--font-serif);
+    font-weight: bold;
+    font-size: 1.1rem;
+    color: var(--primary-color);
+}
+
+.menu-close {
+    display: none;
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 2rem;
+    cursor: pointer;
+    line-height: 1;
+}
+
+.sidebar-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 950;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+/* Main Content */
+.content-area {
+    margin-left: var(--sidebar-width);
+    flex: 1;
+    padding: 4rem 2rem;
+    /* Reduced horizontal padding to rely on max-width */
+    background-color: var(--bg-color);
+}
+
+/* Typography & Book Content */
+.chapter-content {
+    background: #fff;
+    padding: 4rem 5rem;
+    /* Wide inner padding for text */
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    /* Softer, larger shadow */
+    border-radius: 12px;
+    font-family: var(--font-serif);
+    font-size: 1.25rem;
+    /* Slightly larger text */
+    color: #2d3748;
+    max-width: 46rem;
+    /* Optimal reading line length */
+    margin: 0 auto;
+    /* Center the card */
+    overflow: visible;
+    /* Allow images to break out */
+    position: relative;
+    display: block;
+}
+
+/* Override Calibre classes to fit new design */
+.calibre {
+    margin: 0 !important;
+}
+
+/* Renlei Specific Headers */
+h1.p,
+h2.p1,
+h1.calibre3,
+.chapter-title {
+    /* Chapter Titles */
+    font-size: 2.5rem !important;
+    text-align: left !important;
+    color: var(--primary-color) !important;
+    border-bottom: 2px solid var(--accent-color);
+    padding-bottom: 1rem;
+    margin-top: 0 !important;
+    font-family: var(--font-serif);
+    line-height: 1.3;
+}
+
+/* Fix for p.calibre4 - Ensure it is NOT a title */
+.calibre4 {
+    font-size: 1.25rem !important;
+    color: inherit !important;
+    border: none !important;
+    padding-bottom: 0 !important;
+    margin-top: 0 !important;
+    text-align: justify;
+}
+
+/* Sub-headers if any */
+h3.sigil_not_in_toc {
+    font-size: 1.5rem;
+    color: var(--primary-color);
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+    font-weight: bold;
+}
+
+.calibre5 {
+    display: none;
+}
+
+/* Hide the break tag inside titles if breaks layout */
+.num {
+    display: inline-block;
+    margin-right: 0.5rem;
+    color: var(--accent-color);
+}
+
+.p {
+    margin-bottom: 1.5em;
+    text-align: justify;
+}
+
+/* Navigation Footer */
+.navigation-footer {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--border-color);
+}
+
+.nav-btn {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.75rem 1.5rem;
+    background: #fff;
+    border: 1px solid var(--border-color);
+    color: var(--primary-color);
+    text-decoration: none;
+    border-radius: 6px;
+    transition: all 0.2s;
+    font-weight: 600;
+    font-size: 0.9rem;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.nav-btn:hover {
+    background: var(--primary-color);
+    color: #fff;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Images - "Pop Out" Effect */
+.content-area img {
+    /* Break out of the container bounds */
+    width: calc(100% + 6rem);
+    max-width: none;
+    /* Override default constraint */
+    margin-left: -3rem;
+    /* (-6rem / 2) to center */
+    margin-top: 2.5rem;
+    margin-bottom: 2.5rem;
+
+    border-radius: 8px;
+    box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.2);
+    /* Deep shadow */
+    display: block;
+
+    /* Interactive 'Jump' */
+    cursor: zoom-in;
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.27), box-shadow 0.3s ease;
+}
+
+.content-area img:hover {
+    transform: scale(1.03) translateY(-5px);
+    box-shadow: 0 30px 60px -12px rgba(0, 0, 0, 0.25);
+    z-index: 10;
+    position: relative;
+}
+
+/* Lightbox */
+.lightbox {
+    display: none;
+    position: fixed;
+    z-index: 2000;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.95);
+    justify-content: center;
+    align-items: center;
+    cursor: zoom-out;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+.lightbox.active {
+    display: flex;
+    opacity: 1;
+}
+
+.lightbox img {
+    max-width: 95vw;
+    max-height: 95vh;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+    border-radius: 2px;
+    object-fit: contain;
+    margin: 0;
+    cursor: default;
+    transform: scale(0.9);
+    transition: transform 0.3s ease;
+}
+
+.lightbox.active img {
+    transform: scale(1);
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+    .content-area {
+        padding: 3rem;
+    }
+
+    .chapter-content {
+        padding: 3rem;
+    }
+
+    .content-area img {
+        width: calc(100% + 4rem);
+        margin-left: -2rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .mobile-header {
+        display: flex;
+    }
+
+    .sidebar {
+        transform: translateX(-100%);
+        width: 280px;
+    }
+
+    .sidebar.open {
+        transform: translateX(0);
+    }
+
+    .menu-close {
+        display: block;
+    }
+
+    .content-area {
+        margin-left: 0;
+        padding: 1rem;
+        padding-top: 5rem;
+        /* Space for fixed header */
+        width: 100%;
+        max-width: 100%;
+        box-sizing: border-box;
+    }
+
+    .chapter-content {
+        padding: 1.5rem;
+        width: auto;
+        max-width: 100%;
+    }
+
+    /* Disable breakout on mobile */
+    .content-area img {
+        width: 100%;
+        margin-left: 0;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .sidebar-overlay.active {
+        display: block;
+        opacity: 1;
+    }
+}
+/* Silk Road Specific Overrides */
+.big-h {
+    display: none !important; /* Hide original title as we render our own H1 */
+}
+
+/* Reset kobospans which might have weird font sizes or colors */
+.kobospan, .kobospan1 {
+    font-size: inherit;
+    line-height: inherit;
+    font-family: inherit;
+    color: inherit;
+    background: transparent;
+}

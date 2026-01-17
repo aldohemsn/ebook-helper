@@ -20,3 +20,15 @@ node_modules/
 # Ignore everything in public except README
 public/*
 !public/README.md
+
+# Silk Roads (Taiwan)
+si-chou-zhi-lu/
+dist_sichou/
+
+# Silk Roads (Shao Xudong)
+si-chou-zhi-lu-shao-xu-dong/
+dist_sichou_shao/
+
+# Misc
+The Silk Roads_ A New History of the World - Peter Frankopan/
+dist_silkroads/

@@ -15,26 +15,63 @@ Convert monolithic HTML ebooks (exported from Calibre) into modern, responsive, 
 ```
 ebook-helper/
 ├── scripts/
-│   ├── generate_site.py       # Generator for Chinese ebooks (e.g., 講談社中國史)
-│   ├── generate_sapiens.py    # Generator for Sapiens (English)
-│   ├── theme.css              # Theme for Chinese books
-│   ├── theme_sapiens.css      # Theme for English books  
-│   └── deduplicate_images.py  # Utility to remove duplicate images
-├── public/                    # Place Chinese ebook source files here
-├── sapiens-.../               # Place Sapiens source files here (gitignored)
-├── dist/                      # Generated output (auto-created)
+│   ├── generate_site.py           # Generator for Chinese ebooks (e.g., 講談社中國史)
+│   ├── generate_sapiens.py        # Generator for Sapiens (English)
+│   ├── generate_renlei.py         # Generator for 人類大歷史 (Traditional Chinese Sapiens)
+│   ├── generate_sichou.py         # Generator for 絲綢之路 (Taiwan Edition)
+│   ├── generate_sichou_shao.py    # Generator for 絲綢之路 (Shao Xudong Translation)
+│   ├── generate_silkroads.py      # Generator for The Silk Roads (Peter Frankopan)
+│   ├── theme.css                  # Theme for Chinese books
+│   ├── theme_sapiens.css          # Theme for English books  
+│   ├── theme_renlei.css           # Theme for Traditional Chinese history books
+│   ├── theme_sichou.css           # Theme for Silk Roads (Taiwan)
+│   ├── theme_sichou_shao.css      # Theme for Silk Roads (Shao Xudong)
+│   ├── theme_silkroads.css        # Theme for Silk Roads (Peter Frankopan)
+│   └── deduplicate_images.py      # Utility to remove duplicate images
+├── public/                        # Place Chinese ebook source files here
+├── ren-lei-da-li-shi/             # 人類大歷史 source (gitignored)
+├── si-chou-zhi-lu/                # 絲綢之路 Taiwan edition source (gitignored)
+├── si-chou-zhi-lu-shao-xu-dong/   # 絲綢之路 Shao Xudong translation source (gitignored)
+├── The Silk Roads_ A New History of the World - Peter Frankopan/ # Silk Roads English source (gitignored)
+├── dist/                          # Generated output for 人類大歷史 (auto-created)
+├── dist_sichou/                   # Generated output for 絲綢之路 Taiwan edition
+├── dist_sichou_shao/              # Generated output for 絲綢之路 Shao Xudong edition
+├── dist_silkroads/                # Generated output for Silk Roads (Peter Frankopan)
 └── README.md
 ```
 
 ## Supported Books
 
-| Book | Generator Script | Theme |
-|------|------------------|-------|
-| 講談社中國史 (Chinese) | `generate_site.py` | `theme.css` |
-| Sapiens: A Brief History of Humankind (English) | `generate_sapiens.py` | `theme_sapiens.css` |
-| 人類大歷史 (Traditional Chinese) | `generate_renlei.py` | `theme.css` |
+| Book | Generator Script | Theme | Output Directory |
+|------|------------------|-------|------------------|
+| 講談社中國史 | `generate_site.py` | `theme.css` | `dist/` |
+| Sapiens (English) | `generate_sapiens.py` | `theme_sapiens.css` | `dist/` |
+| 人類大歷史 (Traditional Chinese Sapiens) | `generate_renlei.py` | `theme_renlei.css` | `dist/` |
+| 絲綢之路 (Taiwan Edition) | `generate_sichou.py` | `theme_sichou.css` | `dist_sichou/` |
+| 絲綢之路 (Shao Xudong Translation) | `generate_sichou_shao.py` | `theme_sichou_shao.css` | `dist_sichou_shao/` |
+| The Silk Roads (Original English) | `generate_silkroads.py` | `theme_silkroads.css` | `dist_silkroads/` |
 
-### Quick Start (Chinese Sapiens)
+### Quick Start (The Silk Roads - English)
+
+1. Ensure the ebook source is at `The Silk Roads_ A New History of the World - Peter Frankopan/index.html`
+2. Run the generator:
+   ```bash
+   python3 scripts/generate_silkroads.py
+   ```
+3. Open `dist_silkroads/index.html` to read.
+
+### Quick Start (Silk Roads - Shao Xudong Edition)
+
+1. Ensure the ebook source is at `si-chou-zhi-lu-shao-xu-dong/index.html`
+2. Run the generator:
+   ```bash
+   python3 scripts/generate_sichou_shao.py
+   ```
+3. Open `dist_sichou_shao/index.html` to read.
+
+**Note**: The script automatically removes ads and promotional content inserted by ebook piracy sites.
+
+### Quick Start (Traditional Chinese Sapiens)
 
 1. Ensure the ebook source is at `ren-lei-da-li-shi/index.html`
 2. Run the generator:
