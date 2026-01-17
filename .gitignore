@@ -8,6 +8,7 @@ __pycache__/
 # User data (place source files in public/)
 data/
 kodansha-china-history/
+sapiens-a-brief-history-of-humankind/
 
 # Generated output
 dist/

@@ -5,7 +5,7 @@ Convert monolithic HTML ebooks (exported from Calibre) into modern, responsive, 
 ## Features
 
 - **Dependency-Free**: Uses only Python's built-in libraries (no pip install required)
-- **Premium Design**: Clean, paper-like reading interface with beautiful Chinese typography
+- **Premium Design**: Clean, paper-like reading interface with beautiful typography
 - **Responsive Layout**: Desktop sidebar + mobile hamburger menu
 - **Offline-First**: Uses system fonts, no CDN dependencies
 - **Visual Enhancements**: Breakout images, lightbox, and smooth animations
@@ -14,32 +14,41 @@ Convert monolithic HTML ebooks (exported from Calibre) into modern, responsive, 
 
 ```
 ebook-helper/
-├── public/              # Place your ebook source files here
-│   ├── index.html       # Calibre-exported HTML
-│   └── images/          # Images folder
 ├── scripts/
-│   ├── generate_site.py # Main generation script
-│   └── theme.css        # Styling for generated site
-├── dist/                # Generated output (auto-created)
+│   ├── generate_site.py       # Generator for Chinese ebooks (e.g., 講談社中國史)
+│   ├── generate_sapiens.py    # Generator for Sapiens (English)
+│   ├── theme.css              # Theme for Chinese books
+│   ├── theme_sapiens.css      # Theme for English books  
+│   └── deduplicate_images.py  # Utility to remove duplicate images
+├── public/                    # Place Chinese ebook source files here
+├── sapiens-.../               # Place Sapiens source files here (gitignored)
+├── dist/                      # Generated output (auto-created)
 └── README.md
 ```
+
+## Supported Books
+
+| Book | Generator Script | Theme |
+|------|------------------|-------|
+| 講談社中國史 (Chinese) | `generate_site.py` | `theme.css` |
+| Sapiens: A Brief History of Humankind | `generate_sapiens.py` | `theme_sapiens.css` |
 
 ## Quick Start
 
 ### 1. Prepare Your Ebook
 
-Export your ebook as HTML from Calibre, then place the files in the `public/` directory:
-
-```bash
-public/
-├── index.html    # Main HTML file
-└── images/       # Images folder (if any)
-```
+Export your ebook as HTML from Calibre, then place the files in the appropriate directory.
 
 ### 2. Generate the Static Site
 
+For Chinese books:
 ```bash
 python3 scripts/generate_site.py
+```
+
+For Sapiens:
+```bash
+python3 scripts/generate_sapiens.py
 ```
 
 ### 3. View the Result
@@ -47,7 +56,6 @@ python3 scripts/generate_site.py
 The generated site will be in the `dist/` folder. Open `dist/index.html` in your browser, or serve it locally:
 
 ```bash
-# Using Python's built-in server
 cd dist && python3 -m http.server 8080
 ```
 
@@ -56,20 +64,22 @@ cd dist && python3 -m http.server 8080
 ### Content Processing
 
 - Uses regex-based parsing to split the source HTML
-- Identifies chapter headers (`<h1 class="calibre4">`) as split points
-- Generates individual `chapter_XX.html` files
+- Identifies chapter/section markers as split points
+- Generates individual `chapter_XX.html` files with navigation
 
 ### Design Features
 
-- **Typography**: Noto Serif TC / System Font Stack (Songti, PMingLiU, Source Han Serif)
+- **Chinese Typography**: Noto Serif TC / System Font Stack (Songti, Source Han Serif)
+- **English Typography**: Georgia, Times New Roman (optimized line length ~75-80 chars)
 - **Layout**: Fixed sidebar navigation with card-style content area
-- **Images**: "Breakout" styling with deep shadows for visual impact
+- **Images**: Breakout styling with shadows for visual impact
 - **Interaction**: Click-to-zoom lightbox for images
 
 ### Navigation
 
 - Auto-generated table of contents with volume/section headers
 - Active chapter highlighting in sidebar
+- Previous/Next navigation buttons
 
 ## License
 
