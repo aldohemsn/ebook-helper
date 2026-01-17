@@ -9,6 +9,7 @@ Convert monolithic HTML ebooks (exported from Calibre) into modern, responsive, 
 - **Responsive Layout**: Desktop sidebar + mobile hamburger menu
 - **Offline-First**: Uses system fonts, no CDN dependencies
 - **Visual Enhancements**: Breakout images, lightbox, and smooth animations
+- **Documentation**: See [Design Principles](docs/design_principles.md) for architectural decisions (e.g., handling complex sidebars).
 
 ## Project Structure
 

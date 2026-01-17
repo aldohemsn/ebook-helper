@@ -85,30 +85,50 @@ HTML_TEMPLATE = """
                 }}
             }});
 
-            // Expand parents of active link
+            // Helper function: collapse all items at a given level (siblings of the target)
+            function collapseSiblings(targetLi) {{
+                const parentUl = targetLi.parentElement;
+                if (!parentUl) return;
+                
+                const siblings = parentUl.querySelectorAll(':scope > li.has-children');
+                siblings.forEach(sibling => {{
+                    if (sibling !== targetLi) {{
+                        sibling.classList.remove('expanded');
+                        const nestedUl = sibling.querySelector(':scope > ul.nested');
+                        if (nestedUl) {{
+                            nestedUl.classList.add('collapsed');
+                            // Also collapse all descendants
+                            const descendantLis = nestedUl.querySelectorAll('li.has-children');
+                            descendantLis.forEach(desc => {{
+                                desc.classList.remove('expanded');
+                                const descNested = desc.querySelector(':scope > ul.nested');
+                                if (descNested) descNested.classList.add('collapsed');
+                            }});
+                        }}
+                    }}
+                }});
+            }}
+
+            // Expand parents of active link (only the path to active, not siblings)
             if (activeLink) {{
-                // 1. If active link is a parent itself, expand it
-                const selfLi = activeLink.closest('li.has-children');
-                // Check if the link is actually inside the toggle part (header), not a child in the nested list
-                // (Though standard querySelectorAll('.toc a') gets all. activeLink is the specific one.)
-                // If activeLink is the Header link, it is immediate child of .toc-item
-                if (selfLi && activeLink.closest('.toc-item')) {{
-                     selfLi.classList.add('expanded');
-                     const childUl = selfLi.querySelector('ul.nested');
-                     if (childUl) childUl.classList.remove('collapsed');
+                // Build path from active link to root
+                let pathItems = [];
+                let current = activeLink.closest('li');
+                while (current) {{
+                    if (current.classList.contains('has-children')) {{
+                        pathItems.push(current);
+                    }}
+                    const parentUl = current.parentElement;
+                    current = parentUl ? parentUl.closest('li') : null;
                 }}
 
-                // 2. Expand ancestors
-                let parent = activeLink.closest('ul.nested');
-                while (parent) {{
-                    parent.classList.remove('collapsed');
-                    const li = parent.closest('li');
-                    if (li) {{
-                        li.classList.add('expanded');
-                        li.classList.add('active-parent');
-                    }}
-                    parent = li ? li.closest('ul.nested') : null;
-                }}
+                // Expand only items in the path
+                pathItems.forEach(li => {{
+                    li.classList.add('expanded');
+                    li.classList.add('active-parent');
+                    const nested = li.querySelector(':scope > ul.nested');
+                    if (nested) nested.classList.remove('collapsed');
+                }});
                 
                 // Scroll into view after expansion
                 setTimeout(() => {{
@@ -116,16 +136,37 @@ HTML_TEMPLATE = """
                 }}, 100);
             }}
 
-            // Sidebar Toggles
+            // Sidebar Toggles - Accordion behavior
             const toggles = document.querySelectorAll('.toc-toggle');
             toggles.forEach(toggle => {{
                 toggle.addEventListener('click', (e) => {{
                     e.stopPropagation();
                     const li = toggle.closest('li');
-                    const nested = li.querySelector('.nested');
-                    if (nested) {{
-                        nested.classList.toggle('collapsed');
-                        li.classList.toggle('expanded');
+                    const nested = li.querySelector(':scope > .nested');
+                    
+                    if (!nested) return;
+                    
+                    const isExpanding = nested.classList.contains('collapsed');
+                    
+                    if (isExpanding) {{
+                        // Collapse siblings first (accordion behavior)
+                        collapseSiblings(li);
+                        
+                        // Then expand this one
+                        nested.classList.remove('collapsed');
+                        li.classList.add('expanded');
+                    }} else {{
+                        // Collapsing - also collapse all children
+                        nested.classList.add('collapsed');
+                        li.classList.remove('expanded');
+                        
+                        // Collapse all descendant items
+                        const descendantLis = nested.querySelectorAll('li.has-children');
+                        descendantLis.forEach(desc => {{
+                            desc.classList.remove('expanded');
+                            const descNested = desc.querySelector(':scope > ul.nested');
+                            if (descNested) descNested.classList.add('collapsed');
+                        }});
                     }}
                 }});
             }});
@@ -378,55 +419,148 @@ def main():
          shutil.copy(theme_src, os.path.join(OUTPUT_DIR, THEME_CSS_NAME))
          print("Copied theme css.")
 
-    # Generate TOC HTML with nesting
-    toc_tree = []
-    current_parent = None
+    # Generate TOC HTML with THREE-LEVEL nesting: Volume → Author → Works
+    # Volume markers are specific chapters for each major dictionary
     
-    # Pre-process chapters to build tree
+    def is_volume_header(title):
+        """Check if this chapter is a volume header (e.g. 唐诗鉴赏辞典)"""
+        # Specific volume titles - must contain these specific patterns
+        volume_patterns = [
+            '唐诗鉴赏辞典',
+            '宋词鉴赏辞典', 
+            '元曲鉴赏辞典',
+            '古文鉴赏辞典'
+        ]
+        for pattern in volume_patterns:
+            if pattern in title:
+                return True
+        return False
+    
+    def is_volume_aux(title):
+        """Check if this is auxiliary content for a volume (出版说明, 凡例, 序言, etc.)"""
+        aux_keywords = ['出版说明', '凡例', '序言', '前言', '目录', '后记', '附录', 
+                        '书目', '索引', '简释', '词学', '词牌']
+        for kw in aux_keywords:
+            if kw in title:
+                return True
+        return False
+    
+    # Build three-level tree structure
+    volumes = []  # List of {volume_chapter, authors: [{author_chapter, works: []}], aux_items: []}
+    current_volume = None
+    current_author = None
+    
     for ch in final_chapters:
-        if ch["is_header"]:
-            # New section
-            current_parent = {
-                "chapter": ch,
-                "children": []
+        title = ch['title']
+        
+        # Check if this is a new volume
+        if is_volume_header(title):
+            # Save previous volume
+            if current_volume:
+                if current_author:
+                    current_volume['authors'].append(current_author)
+                    current_author = None
+                volumes.append(current_volume)
+            
+            current_volume = {
+                'chapter': ch,
+                'authors': [],
+                'aux_items': []  # For 出版说明, 凡例, 序言 etc.
             }
-            toc_tree.append(current_parent)
+            continue
+        
+        # If we don't have a volume yet, create a default one
+        if not current_volume:
+            # First few items before first volume - create 唐诗鉴赏辞典 as default
+            current_volume = {
+                'chapter': {'title': '唐诗鉴赏辞典', 'filename': 'index.html', 'is_header': True},
+                'authors': [],
+                'aux_items': []
+            }
+        
+        # Check if this is auxiliary content (出版说明, 凡例, etc.)
+        if is_volume_aux(title):
+            current_volume['aux_items'].append(ch)
+            continue
+        
+        # Check if this is an author header (is_header=True)
+        if ch['is_header']:
+            # Save previous author
+            if current_author:
+                current_volume['authors'].append(current_author)
+            
+            current_author = {
+                'chapter': ch,
+                'works': []
+            }
         else:
-            if current_parent:
-                current_parent["children"].append(ch)
+            # This is a work
+            if current_author:
+                current_author['works'].append(ch)
             else:
-                # Root level item (e.g. cover/preface)
-                toc_tree.append({
-                    "chapter": ch,
-                    "children": []
-                })
-
+                # Orphan work without author - add as aux item
+                current_volume['aux_items'].append(ch)
+    
+    # Don't forget the last author and volume
+    if current_author:
+        current_volume['authors'].append(current_author)
+    if current_volume:
+        volumes.append(current_volume)
+    
+    # Generate TOC HTML
     toc_html = ""
-    for node in toc_tree:
-        parent_ch = node["chapter"]
-        children = node["children"]
+    
+    for vol in volumes:
+        vol_ch = vol['chapter']
+        vol_title = vol_ch['title']
+        vol_file = vol_ch['filename']
+        authors = vol['authors']
+        aux_items = vol['aux_items']
         
-        title = parent_ch['title']
-        filename = parent_ch['filename']
+        has_content = authors or aux_items
         
-        if children:
-            # It's a folder/section with children
-            toc_html += f'<li class="has-children">\n'
+        if has_content:
+            # Volume with content - create expandable section
+            toc_html += f'<li class="has-children volume-level">\n'
             toc_html += f'    <div class="toc-item">\n'
             toc_html += f'        <span class="toc-toggle">▶</span>\n'
-            toc_html += f'        <a href="{filename}">{title}</a>\n'
+            toc_html += f'        <a href="{vol_file}">{vol_title}</a>\n'
             toc_html += f'    </div>\n'
             toc_html += f'    <ul class="nested collapsed">\n'
-            for child in children:
-                c_title = child['title']
-                c_file = child['filename']
-                toc_html += f'        <li><a href="{c_file}">{c_title}</a></li>\n'
+            
+            # Add auxiliary items first (出版说明, 凡例, etc.)
+            for aux in aux_items:
+                toc_html += f'        <li class="book-section-header"><a href="{aux["filename"]}">{aux["title"]}</a></li>\n'
+            
+            # Add authors
+            for author in authors:
+                auth_ch = author['chapter']
+                auth_title = auth_ch['title']
+                auth_file = auth_ch['filename']
+                works = author['works']
+                
+                if works:
+                    # Author with works
+                    toc_html += f'        <li class="has-children author-level">\n'
+                    toc_html += f'            <div class="toc-item">\n'
+                    toc_html += f'                <span class="toc-toggle">▶</span>\n'
+                    toc_html += f'                <a href="{auth_file}">{auth_title}</a>\n'
+                    toc_html += f'            </div>\n'
+                    toc_html += f'            <ul class="nested collapsed">\n'
+                    for work in works:
+                        toc_html += f'                <li><a href="{work["filename"]}">{work["title"]}</a></li>\n'
+                    toc_html += f'            </ul>\n'
+                    toc_html += f'        </li>\n'
+                else:
+                    # Author without works (just a standalone header)
+                    toc_html += f'        <li><a href="{auth_file}">{auth_title}</a></li>\n'
+            
             toc_html += f'    </ul>\n'
             toc_html += f'</li>\n'
         else:
-            # Leaf node at root level
-            cls = "book-section-header" if parent_ch["is_header"] else ""
-            toc_html += f'<li class="{cls}"><a href="{filename}">{title}</a></li>\n'
+            # Volume without content (standalone)
+            cls = "book-section-header" if vol_ch.get("is_header", False) else ""
+            toc_html += f'<li class="{cls}"><a href="{vol_file}">{vol_title}</a></li>\n'
 
     # Write Pages
     print(f"Writing {len(final_chapters)} pages...")

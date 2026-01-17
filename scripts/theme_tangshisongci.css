@@ -168,6 +168,39 @@ ul.nested.collapsed {
     display: none;
 }
 
+/* Volume-level items (Top-level books like 唐诗鉴赏辞典) */
+.volume-level>.toc-item {
+    background: rgba(168, 63, 63, 0.06);
+    margin-top: 0.8rem;
+    border-left: 3px solid var(--accent-color);
+}
+
+.volume-level>.toc-item a {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--primary-color);
+    letter-spacing: 0.02em;
+}
+
+.volume-level>.toc-item .toc-toggle {
+    color: var(--accent-color);
+}
+
+/* Author-level items (Authors within a volume) */
+.author-level>.toc-item {
+    background: rgba(0, 0, 0, 0.03);
+    margin-left: 0.5rem;
+}
+
+.author-level>.toc-item a {
+    font-size: 0.92rem;
+}
+
+/* Deeper nested indentation for author works */
+.author-level ul.nested li a {
+    padding-left: 4.5rem;
+}
+
 ul.nested li a {
     padding-left: 3.5rem;
     /* Increased indent for children */

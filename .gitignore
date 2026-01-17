@@ -42,3 +42,4 @@ dist_tangshisongci/
 
 # Silk Roads (English)
 dist_silkroads/
+.venv/
