@@ -55,6 +55,7 @@ ebook-helper/
 | 絲綢之路 (Shao Xudong Translation) | `generate_sichou_shao.py` | `theme_sichou_shao.css` | `dist_sichou_shao/` |
 | The Silk Roads (Original English) | `generate_silkroads.py` | `theme_silkroads.css` | `dist_silkroads/` |
 | 人类简史 (Simplified Chinese Sapiens) | `generate_renlei_jian_shi.py` | `theme_renlei_jian_shi.css` | `dist_renlei_jian_shi/` |
+| 唐诗宋词元曲古文 (Tang Shi Song Ci...) | `generate_tangshisongci_bs4.py` | `theme_tangshisongci.css` | `dist_tangshisongci/` |
 
 ### Quick Start (Sapiens - Simplified Chinese)
 
@@ -84,6 +85,15 @@ ebook-helper/
 3. Open `dist_sichou_shao/index.html` to read.
 
 **Note**: The script automatically removes ads and promotional content inserted by ebook piracy sites.
+
+### Quick Start (Tang Shi Song Ci Yuan Qu Gu Wen)
+
+1. Ensure the ebook source is at `Tang Shi Song Ci Yuan Qu Gu Wen (Gong 6Ce - Shang Hai Ci Shu Chu Ban She Wen Xue Jian /index.html`
+2. Run the generator:
+   ```bash
+   python3 scripts/generate_tangshisongci_bs4.py
+   ```
+3. Open `dist_tangshisongci/index.html` to read.
 
 ### Quick Start (Traditional Chinese Sapiens)
 

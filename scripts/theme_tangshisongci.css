@@ -1,0 +1,430 @@
+/* Tang Shi Song Ci Theme */
+:root {
+    /* Chinese Traditional Colors */
+    --primary-color: #2b3a42;
+    /* Ink color */
+    --accent-color: #a83f3f;
+    /* Seal red */
+    --bg-color: #f7f5f0;
+    /* Rice paper */
+    --sidebar-bg: #e6e2d8;
+    --sidebar-text: #5d5045;
+    --sidebar-active: #2b3a42;
+    --border-color: #dcd6cb;
+
+    --sidebar-width: 300px;
+    --font-serif: "Noto Serif SC", "Songti SC", "Source Han Serif CN", "STSong", "AR PL New Sung", "SimSun", serif;
+    --font-sans: "Noto Sans SC", "PingFang SC", "Heiti SC", sans-serif;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: var(--font-serif);
+    background-color: var(--bg-color);
+    color: var(--primary-color);
+    line-height: 1.8;
+    font-size: 19px;
+    /* Slightly larger for easier reading of characters */
+}
+
+/* Layout */
+.app-container {
+    display: flex;
+    min-height: 100vh;
+}
+
+/* Sidebar */
+.sidebar {
+    width: var(--sidebar-width);
+    background-color: var(--sidebar-bg);
+    color: var(--sidebar-text);
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    height: 100vh;
+    overflow-y: auto;
+    left: 0;
+    top: 0;
+    border-right: 1px solid var(--border-color);
+    z-index: 1000;
+    transition: transform 0.3s ease;
+}
+
+.sidebar-header {
+    padding: 2rem 1.5rem;
+    background: rgba(0, 0, 0, 0.03);
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.book-title {
+    font-family: var(--font-serif);
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--primary-color);
+    text-decoration: none;
+    letter-spacing: 0.05em;
+    writing-mode: horizontal-tb;
+    /* Keep horizontal for title */
+}
+
+.toc {
+    flex: 1;
+    padding: 1rem 0;
+    overflow-y: auto;
+}
+
+.toc ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.toc li {
+    margin: 0;
+}
+
+/* Regular items (poems) - indented */
+.toc li:not(.book-section-header) a {
+    display: block;
+    padding: 0.4rem 1.5rem 0.4rem 2.5rem;
+    color: var(--sidebar-text);
+    text-decoration: none;
+    transition: all 0.2s;
+    font-size: 0.88rem;
+    border-left: 3px solid transparent;
+    opacity: 0.85;
+}
+
+/* Section headers (authors/major sections) - prominent */
+.toc li.book-section-header {
+    margin-top: 0.8rem;
+}
+
+.toc li.book-section-header:first-child {
+    margin-top: 0;
+}
+
+.toc li.book-section-header>a,
+.toc-item a {
+    display: block;
+    padding: 0.6rem 1.5rem;
+    color: var(--primary-color);
+    text-decoration: none;
+    transition: all 0.2s;
+    font-size: 0.95rem;
+    font-weight: 600;
+    border-left: 3px solid transparent;
+    background: rgba(0, 0, 0, 0.02);
+    flex: 1;
+}
+
+/* Toggle Styles */
+.toc-item {
+    display: flex;
+    align-items: center;
+    background: rgba(0, 0, 0, 0.02);
+    margin-top: 0.5rem;
+}
+
+.toc-toggle {
+    cursor: pointer;
+    padding: 0.6rem 0.5rem;
+    font-size: 0.8rem;
+    color: var(--sidebar-text);
+    transition: transform 0.2s;
+    user-select: none;
+    width: 2rem;
+    text-align: center;
+}
+
+.toc-toggle:hover {
+    color: var(--accent-color);
+    background: rgba(0, 0, 0, 0.05);
+}
+
+.toc-item a {
+    background: none;
+    /* Reset background as it's handled by toc-item */
+    padding-left: 0.5rem;
+}
+
+.has-children.expanded .toc-toggle {
+    transform: rotate(90deg);
+}
+
+ul.nested {
+    list-style: none;
+    padding-left: 0;
+    margin: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease-out;
+}
+
+ul.nested.collapsed {
+    display: none;
+}
+
+ul.nested li a {
+    padding-left: 3.5rem;
+    /* Increased indent for children */
+}
+
+/* Active State */
+.toc a:hover {
+    color: var(--primary-color);
+    background: rgba(0, 0, 0, 0.06);
+    opacity: 1;
+}
+
+.toc a.active {
+    color: var(--accent-color);
+    background: rgba(168, 63, 63, 0.08);
+    /* Highlight bg */
+    border-left-color: var(--accent-color);
+    font-weight: 600;
+    opacity: 1;
+}
+
+/* If the parent is active, also highlight it? optional */
+.has-children.active-parent>.toc-item {
+    background: rgba(168, 63, 63, 0.04);
+}
+
+/* Mobile Header */
+.mobile-header {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 56px;
+    background: var(--bg-color);
+    border-bottom: 1px solid var(--border-color);
+    z-index: 900;
+    align-items: center;
+    padding: 0 1rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.menu-toggle {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: var(--primary-color);
+    padding: 0.5rem;
+}
+
+.mobile-title {
+    font-family: var(--font-serif);
+    font-weight: bold;
+    font-size: 1.1rem;
+    color: var(--primary-color);
+    margin-left: 1rem;
+}
+
+.menu-close {
+    display: none;
+    background: none;
+    border: none;
+    color: var(--primary-color);
+    font-size: 1.8rem;
+    cursor: pointer;
+}
+
+.sidebar-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 950;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+/* Content Area */
+.content-area {
+    margin-left: var(--sidebar-width);
+    flex: 1;
+    padding: 4rem 2rem;
+    background-color: var(--bg-color);
+}
+
+.chapter-content {
+    background: #fff;
+    padding: 5rem 6rem;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    border: 1px solid #e8e8e8;
+    max-width: 48rem;
+    /* Classical width */
+    margin: 0 auto;
+    position: relative;
+}
+
+/* Typography styles for content */
+p {
+    margin-bottom: 1.5em;
+    text-align: justify;
+    text-indent: 2em;
+    /* Standard Chinese indent */
+}
+
+/* Poems specific styling if identifiable, otherwise general headers */
+h1,
+h2,
+h3 {
+    font-family: var(--font-serif);
+    color: var(--primary-color);
+    font-weight: 700;
+    text-align: center;
+    margin-top: 2em;
+    margin-bottom: 1.5em;
+    line-height: 1.4;
+}
+
+h1 {
+    font-size: 2.2rem;
+    border-bottom: none;
+}
+
+h2 {
+    font-size: 1.8rem;
+}
+
+h3 {
+    font-size: 1.4rem;
+}
+
+/* Styles from source HTML mapping */
+.biaoti,
+.calibre5 {
+    font-size: 2rem;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+
+
+.shuming {
+    font-weight: 700;
+    margin-top: 1rem;
+}
+
+/* Poem lines often use specific classes? */
+/* Assuming standard paragraphs for now */
+
+/* Navigation Footer */
+.navigation-footer {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 4rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--border-color);
+    max-width: 48rem;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.nav-btn {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.6rem 1.2rem;
+    color: var(--primary-color);
+    text-decoration: none;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    background: #fff;
+    transition: all 0.2s;
+    font-family: var(--font-serif);
+}
+
+.nav-btn:hover {
+    background: var(--primary-color);
+    color: #fff;
+    border-color: var(--primary-color);
+}
+
+/* Lightbox */
+.lightbox {
+    display: none;
+    position: fixed;
+    z-index: 2000;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.9);
+    justify-content: center;
+    align-items: center;
+    cursor: zoom-out;
+}
+
+.lightbox.active {
+    display: flex;
+}
+
+.lightbox img {
+    max-width: 95vw;
+    max-height: 95vh;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+}
+
+.chapter-content img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 2rem auto;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.chapter-content img.zaozi {
+    display: inline-block;
+    max-width: none;
+    width: 1.2em;
+    height: auto;
+    margin: 0 2px;
+    box-shadow: none;
+    vertical-align: text-bottom;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .sidebar {
+        transform: translateX(-100%);
+    }
+
+    .sidebar.open {
+        transform: translateX(0);
+    }
+
+    .mobile-header {
+        display: flex;
+    }
+
+    .menu-close {
+        display: block;
+    }
+
+    .content-area {
+        margin-left: 0;
+        padding: 1rem;
+        padding-top: 4rem;
+    }
+
+    .chapter-content {
+        padding: 2rem 1.5rem;
+    }
+
+    .sidebar-overlay.active {
+        display: block;
+        opacity: 1;
+    }
+}
